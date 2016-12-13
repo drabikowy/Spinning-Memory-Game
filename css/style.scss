@@ -1,0 +1,32 @@
+// compile
+
+@import 'reset';
+@import 'animate.css';
+
+$plateSize: 100%/7;
+
+
+.game_board {
+   height: 500px;
+   width:500px;
+   border: 1px solid black;
+}
+
+.row {
+   height: $plateSize;
+   display: flex;
+   flex-flow: row nowrap;
+   justify-content: center;
+
+   .plate, .central_plate {
+      border: 1px solid black;
+      border-radius: 5px;
+      height: 100%;
+      width: $plateSize;
+   }
+
+   .central_plate {
+      background-color: black;
+
+   }
+}
