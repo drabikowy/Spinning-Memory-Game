@@ -1,52 +1,97 @@
 $(document).ready(function() {
 
-   var plates = $('.plate');
 
-   var randomPlates = function(){
-      var generated = palette('cb-Dark2',6).concat(palette('cb-Pastel2',6));
-      var generated2 = palette('cb-Paired',11).concat(palette('cb-dark',4));
-      // var generatedColors = randomColor({hue: });
-// 'cb-Pastel2'8, 'cb-Dark2' 8, tol-sq' 10, 'cb-Paired',11
+   function gameStep(){
+      plates = $('.active');
 
+      plates.on('click',function(){
+         flip($(this));
+         var fli = $('.flipped');
+         console.log(fli);
 
-      var colors = generated.concat(generated);
-      colors.shuffle();
-      console.log(colors);
-      plates.each(function(i,plate){
-         $(plate).data('color','#'+colors[0]);
-         console.log($(plate).data('color'));
-         colors.splice(0,1);
+         if( fli.length == 2 ) {
+            plates.off();
+
+            if( compareColor(fli[0],fli[1]) ) {
+               //  okey sound
+
+               fli.each(function(i,element){
+                  $(element).removeClass('active').removeClass('flipped');
+               });
+
+               gameStep();
+            }else {
+               var checkTime = setTimeout(function(){
+                  fli.each(function(i,e){
+                     flipBack($(e));
+                  });
+
+                  gameStep();
+               }, 1500);
+
+            }
+         }
       });
-      return colors;
    }
 
-randomPlates();
+   // in new game , add Class 'active' to each plate
 
-   $('.plate').click(function(){
-      if($(this).hasClass('flipped')){
-         $(this).transition({
-            perpective: '0',
-            rotateX: '0'
-         }).removeClass('flipped').css('background', 'white');
+   function activatePlates(){
+      plates.each(function(i,element){
+         $(element).addClass('active');
+      })
+   }
+
+   function compareColor(p1, p2){
+      console.log("i'm checking", $(p1).data('color'), $(p2).data('color'));
+      if ( $(p1).data('color') == $(p2).data('color') ){
+         return true;
       }else{
-
-         $(this).transition({
-            perspective: '100px',
-            rotateX: '180deg'
-         }).addClass('flipped').css('background',$(this).data('color'));
+         return false;
       }
-   });
-
-});
-
-
-Array.prototype.shuffle = function(){
-   var j, x, i;
-   for (i = this.length; i; i--) {
-      j = Math.floor(Math.random() * i);
-      x = this[i - 1];
-      this[i - 1] = this[j];
-      this[j] = x;
    }
-   return this;
-}
+
+
+
+   // Whole Game Scenario:
+
+   function startGame(){
+      var plates = $('.plate');
+      activatePlates();
+      randomPlateColor();
+      randomArrows('medium');
+
+      gameStep();
+   }
+
+   startGame();
+
+
+
+
+
+
+
+
+
+   // TEST BUTTONS:
+   $('#flipUp').click(function(){
+      boardFlip();
+   });
+   $('#flipDown').click(function(){
+      boardFlipBack();
+   });
+   $('#rotateClockwise').click(function(){
+      boardRotateClock();
+   });
+   $('#rotateCounterClockwise').click(function(){
+      boardRotateCounterClock();
+   });
+   
+   $('#upRight3D').click(function(){
+      boardFlipUpRight3D();
+   });
+   $('#upLeft3D').click(function(){
+      boardFlipUpLeft3D();
+   });
+});
