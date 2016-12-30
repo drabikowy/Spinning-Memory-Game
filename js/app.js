@@ -73,25 +73,38 @@ $(document).ready(function() {
 
 
 
-
+   gameBoard.transition({
+      perspective: '500px',
+      rotateX: '0deg'
+   });
    // TEST BUTTONS:
    $('#flipUp').click(function(){
       boardFlip();
+      flipCounter++;
    });
    $('#flipDown').click(function(){
       boardFlipBack();
+      flipCounter++;
    });
    $('#rotateClockwise').click(function(){
-      boardRotateClock();
+      if(flipCounter%2 == 0) {
+         boardRotateClock();
+      }else {
+         boardRotateCounterClock();
+      }
    });
    $('#rotateCounterClockwise').click(function(){
-      boardRotateCounterClock();
+      if(flipCounter%2 == 0) {
+         boardRotateCounterClock();
+      }else {
+         boardRotateClock();
+      }
    });
-   
+
    $('#upRight3D').click(function(){
       boardFlipUpRight3D();
    });
-   $('#upLeft3D').click(function(){
-      boardFlipUpLeft3D();
+   $('#downLeft3D').click(function(){
+      boardFlipDownLeft3D();
    });
 });

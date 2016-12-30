@@ -5,12 +5,28 @@
 
 $plateSize: 100%/7;
 
+body {
+   width:100vw;
+   height:100vh;
+   display:flex;
+   align-items: center;
+   justify-content: center;
+}
 
 .game_board {
    margin: 0 auto;
-   height: 500px;
-   width:500px;
-   border: 1px solid black;
+
+
+   @media (orientation: landscape){
+      height: 90vh;
+      width:90vh;
+   }
+   @media (orientation: portrait){
+      height: 90vw;
+      width:90vw;
+   }
+
+
 }
 
 .row {
@@ -22,6 +38,10 @@ $plateSize: 100%/7;
    .plate, .central_plate {
       border: 1px solid black;
       border-radius: 5px;
+      @media (min-resolution: 264){
+         border-radius: 10px;
+      }
+
       height: 100%;
       width: $plateSize;
    }

@@ -82,7 +82,16 @@ function randomArrows(level) {
 
 
 /* Plates Flipping: */
-
+function platesRotate(deg) {
+   var plates = $('.plate');
+   plates.each(function(index,element){
+      $(element).transition({
+         perspective: '100px',
+         rotate: deg,
+         duration: 1000
+      })
+   })
+}
 function flip(plate){
    plate.transition({
       perspective: '100px',
@@ -92,13 +101,14 @@ function flip(plate){
 
 function flipBack(plate){
    plate.transition({
-      perpective: '0',
+      perpective: '100px',
       rotateX: '0'
    }).removeClass('flipped').css('background-color', 'white');
 }
 
 /*GameBoard Flipping and Rotating*/
 
+var flipCounter = 0;
 function boardFlip() {
    gameBoard.transition({
       perspective: '500px',
@@ -118,12 +128,14 @@ function boardRotateClock(){
       perspective: '500px',
       rotate: '+=90deg'
    });
+   platesRotate('-=90deg');
 }
 function boardRotateCounterClock(){
    gameBoard.transition({
       perspective: '500px',
       rotate: '-=90deg'
    });
+   platesRotate('+=90deg');
 }
 
 // IMPORTANT!
@@ -135,11 +147,11 @@ function boardFlipUpRight3D() {
       rotate3d: '1,1,0,'+rotate3D_counter +'deg'
    });
 };
-function boardFlipUpLeft3D() {
-   rotate3D_counter+=180;
+function boardFlipDownLeft3D() {
+   rotate3D_counter-=180;
    gameBoard.transition({
       perspective: '500px',
-      rotate3d: '1,-1,0,'+rotate3D_counter +'deg'
+      rotate3d: '1,1,0,'+rotate3D_counter +'deg'
    });
 };
 
