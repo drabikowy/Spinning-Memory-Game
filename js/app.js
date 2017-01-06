@@ -39,7 +39,7 @@ $(document).ready(function() {
    function activatePlates(){
       plates.each(function(i,element){
          $(element).addClass('active');
-      })
+      });
    }
 
    function compareColor(p1, p2){
@@ -59,7 +59,7 @@ $(document).ready(function() {
       var plates = $('.plate');
       activatePlates();
       randomPlateColor();
-      randomArrows('medium');
+      randomArrows('hard');
 
       gameStep();
    }
@@ -67,7 +67,11 @@ $(document).ready(function() {
    startGame();
 
 
+function Game() {
+   this.score = 0;
+   this.time = 0;
 
+}
 
 
 

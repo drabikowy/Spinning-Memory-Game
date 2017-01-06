@@ -39,13 +39,14 @@ function randomPlateColor(){
 /* Random Arrows and asign to Plates */
 
 function randomArrows(level) {
-   var a = '../images/';
-   var arrowSrc = [a+'clockwise.png',a+'counterclock.png',a+ 'up.png', a+'down.png',a+'left.png', a+'right.png',a+'upLeft3D.png', a+'upRight3D.png'];
+   var a = 'images/';
+   var arrowSrc = [a+'clockwise.png',a+'counterclock.png',a+ 'up.png', a+'down.png'];
+   // ,a+'left.png', a+'right.png',a+'upLeft3D.png', a+'upRight3D.png'];
 
    var urls = arrowSrc.slice(0);
    urls.shuffle();
 
-   switch (level) {
+   switch (level = 'hard') {
       case 'hard':
       $(plates).each(function(i,element){
          if (urls.length>0) {
@@ -77,7 +78,10 @@ function randomArrows(level) {
          }
       }
       break;
-   }
+      default: return;
+   };
+
+
 }
 
 
@@ -96,14 +100,46 @@ function flip(plate){
    plate.transition({
       perspective: '100px',
       rotateX: '180deg'
-   }).addClass('flipped').css('background-color',plate.data('color'));
+   }).addClass('flipped').css({
+
+      'background': 'url('+ plate.data("arrow") + ') center / 80% no-repeat ' + plate.data('color'),
+   });
+
+   if($(plate).data('arrow')){
+      switch (plate.data('arrow')) {
+         case 'images/up.png':
+         boardFlip();
+         flipCounter++;
+         break;
+         case 'images/down.png':
+         boardFlipBack();
+         flipCounter++;
+         break;
+         case 'images/clockwise.png':
+         if(flipCounter%2 == 0) {
+            boardRotateCounterClock();
+         }else {
+            boardRotateClock();
+         }
+         break;
+         case 'images/counterclock.png':
+         if(flipCounter%2 == 0) {
+            boardRotateClock();
+         }else {
+            boardRotateCounterClock();
+         }
+         break;
+         default: return;
+
+      }
+   }
 }
 
 function flipBack(plate){
    plate.transition({
       perpective: '100px',
-      rotateX: '0'
-   }).removeClass('flipped').css('background-color', 'white');
+      rotateX: '0',
+   }).removeClass('flipped').css('background', 'white');
 }
 
 /*GameBoard Flipping and Rotating*/
@@ -112,28 +148,32 @@ var flipCounter = 0;
 function boardFlip() {
    gameBoard.transition({
       perspective: '500px',
-      rotateX: '+=180deg'
+      rotateX: '+=180deg',
+      duration: 2000,
    });
 }
 
 function boardFlipBack() {
    gameBoard.transition({
       perspective: '500px',
-      rotateX: '-=180deg'
+      rotateX: '-=180deg',
+      duration: 2000,
    });
 }
 
 function boardRotateClock(){
    gameBoard.transition({
       perspective: '500px',
-      rotate: '+=90deg'
+      rotate: '+=90deg',
+      duration: 2000,
    });
    platesRotate('-=90deg');
 }
 function boardRotateCounterClock(){
    gameBoard.transition({
       perspective: '500px',
-      rotate: '-=90deg'
+      rotate: '-=90deg',
+      duration: 2000,
    });
    platesRotate('+=90deg');
 }
@@ -154,6 +194,3 @@ function boardFlipDownLeft3D() {
       rotate3d: '1,1,0,'+rotate3D_counter +'deg'
    });
 };
-
-
-/* Color Check */
