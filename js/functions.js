@@ -1,13 +1,13 @@
 //variables:
-var plates = $('.plate');
+const plates = $('.plate');
 // var activePlates=$('.active');
 
-var gameBoard = $('.game_board');
+const gameBoard = $('.game_board');
 
 
 // Array Shuffle method:
 Array.prototype.shuffle = function(){
-   var j, x, i;
+   let j, x, i;
    for (i = this.length; i; i--) {
       j = Math.floor(Math.random() * i);
       x = this[i - 1];
@@ -17,15 +17,17 @@ Array.prototype.shuffle = function(){
    return this;
 }
 
+
+
 /* Random Colors and assign to plates: */
 
 function randomPlateColor(){
-   var generated = palette('cb-Dark2',6).concat(palette('cb-Pastel2',6));
-   var generated2 = palette('cb-Paired',11).concat(palette('cb-dark',4));
-   // var generatedColors = randomColor({hue: });
+   let generated = palette('cb-Dark2',6).concat(palette('cb-Pastel2',6));
+   let generated2 = palette('cb-Paired',11).concat(palette('cb-dark',4));
+   // let generatedColors = randomColor({hue: });
    // 'cb-Pastel2'8, 'cb-Dark2' 8, tol-sq' 10, 'cb-Paired',11
 
-   var colors = generated.concat(generated);
+   let colors = generated.concat(generated);
    colors.shuffle();
    console.log(colors);
    plates.each(function(i,plate){
@@ -39,11 +41,11 @@ function randomPlateColor(){
 /* Random Arrows and asign to Plates */
 
 function randomArrows(level) {
-   var a = 'images/';
-   var arrowSrc = [a+'clockwise.png',a+'counterclock.png',a+ 'up.png', a+'down.png'];
+   let a = 'images/';
+   let arrowSrc = [a+'clockwise.png',a+'counterclock.png',a+ 'up.png', a+'down.png'];
    // ,a+'left.png', a+'right.png',a+'upLeft3D.png', a+'upRight3D.png'];
 
-   var urls = arrowSrc.slice(0);
+   let urls = arrowSrc.slice(0);
    urls.shuffle();
 
    switch (level = 'hard') {
@@ -63,14 +65,14 @@ function randomArrows(level) {
       });
       break;
       case 'medium':
-      var tmpPlates = plates.slice(0);
+      let tmpPlates = plates.slice(0);
       Array.from(tmpPlates).shuffle();
 
-      for (var i=0; i<12; i++) {
+      for (let i=0; i<12; i++) {
          if (urls.length>0) {
             $(tmpPlates[i]).data('arrow',urls[0]);
             urls.splice(0,1);
-         } else {
+         }else {
             urls=arrowSrc.slice(0);
             urls.shuffle();
             $(tmpPlates[i]).data('arrow',urls[0]);
@@ -80,58 +82,69 @@ function randomArrows(level) {
       break;
       default: return;
    };
-
-
 }
 
 
 /* Plates Flipping: */
 function platesRotate(deg) {
-   var plates = $('.plate');
+   let plates = $('.plate');
    plates.each(function(index,element){
-      $(element).transition({
-         perspective: '100px',
-         rotate: deg,
-         duration: 1000
-      })
+      if($(element).hasClass('flipped')){
+         console.log('flipped am I');
+         $(element).transition({
+            perspective: '100px',
+            rotate: `-=${deg}deg`,
+            duration: 1000
+         });
+      }else {
+         $(element).transition({
+            perspective: '100px',
+            rotate: `+=${deg}deg`,
+            duration: 1000
+         })
+      }
    })
 }
 function flip(plate){
    plate.transition({
       perspective: '100px',
-      rotateX: '180deg'
+      rotateX: '180deg',
+      duration: 1000
    }).addClass('flipped').css({
-
       'background': 'url('+ plate.data("arrow") + ') center / 80% no-repeat ' + plate.data('color'),
    });
 
    if($(plate).data('arrow')){
-      switch (plate.data('arrow')) {
-         case 'images/up.png':
-         boardFlip();
-         flipCounter++;
-         break;
-         case 'images/down.png':
-         boardFlipBack();
-         flipCounter++;
-         break;
-         case 'images/clockwise.png':
-         if(flipCounter%2 == 0) {
-            boardRotateCounterClock();
-         }else {
-            boardRotateClock();
-         }
-         break;
-         case 'images/counterclock.png':
-         if(flipCounter%2 == 0) {
-            boardRotateClock();
-         }else {
-            boardRotateCounterClock();
-         }
-         break;
-         default: return;
 
-      }
+      let flipTimer = setTimeout(function(){
+         switch (plate.data('arrow')) {
+            case 'images/up.png':
+            boardFlip();
+            flipCounter++;
+            break;
+            case 'images/down.png':
+            boardFlipBack();
+            flipCounter++;
+            break;
+            case 'images/clockwise.png':
+            if(flipCounter%2 == 0) {
+               boardRotateCounterClock();
+            }else {
+               boardRotateClock();
+            }
+            break;
+            case 'images/counterclock.png':
+            if(flipCounter%2 == 0) {
+               boardRotateClock();
+            }else {
+               boardRotateCounterClock();
+            }
+            break;
+            default: return;
+
+         }
+
+      },1200);
    }
 }
 
@@ -144,7 +157,7 @@ function flipBack(plate){
 
 /*GameBoard Flipping and Rotating*/
 
-var flipCounter = 0;
+let flipCounter = 0;
 function boardFlip() {
    gameBoard.transition({
       perspective: '500px',
@@ -165,21 +178,21 @@ function boardRotateClock(){
    gameBoard.transition({
       perspective: '500px',
       rotate: '+=90deg',
-      duration: 2000,
+      duration: 1000,
    });
-   platesRotate('-=90deg');
+   platesRotate(90);
 }
 function boardRotateCounterClock(){
    gameBoard.transition({
       perspective: '500px',
       rotate: '-=90deg',
-      duration: 2000,
+      duration: 1000,
    });
-   platesRotate('+=90deg');
+   platesRotate(90);
 }
 
 // IMPORTANT!
-var rotate3D_counter=0;
+let rotate3D_counter=0;
 function boardFlipUpRight3D() {
    rotate3D_counter+=180;
    gameBoard.transition({

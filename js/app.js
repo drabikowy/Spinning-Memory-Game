@@ -2,11 +2,11 @@ $(document).ready(function() {
 
 
    function gameStep(){
-      plates = $('.active');
+      let plates = $('.active');
 
       plates.on('click',function(){
          flip($(this));
-         var fli = $('.flipped');
+         let fli = $('.flipped');
          console.log(fli);
 
          if( fli.length == 2 ) {
@@ -21,14 +21,13 @@ $(document).ready(function() {
 
                gameStep();
             }else {
-               var checkTime = setTimeout(function(){
+               let checkTime = setTimeout(function(){
                   fli.each(function(i,e){
                      flipBack($(e));
                   });
 
                   gameStep();
                }, 1500);
-
             }
          }
       });
@@ -56,7 +55,7 @@ $(document).ready(function() {
    // Whole Game Scenario:
 
    function startGame(){
-      var plates = $('.plate');
+      let plates = $('.plate');
       activatePlates();
       randomPlateColor();
       randomArrows('hard');
